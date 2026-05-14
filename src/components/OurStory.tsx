@@ -1,15 +1,44 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const OurStory = () => {
   const navigate = useNavigate();
-  const scrollTo = (href: string) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-  };
+  const sectionRef = useRef<HTMLElement>(null);
+  const textBlockRef = useRef<HTMLDivElement>(null);
+  const firstTextRef = useRef<HTMLHeadingElement>(null);
+  const secondTextRef = useRef<HTMLParagraphElement>(null);
+
+  useGSAP(
+    () => {
+      if (!textBlockRef.current || !firstTextRef.current || !secondTextRef.current) return;
+
+      gsap.set(firstTextRef.current, { color: "rgba(255,255,255,1)" });
+      gsap.set(secondTextRef.current, { color: "rgba(255,255,255,0.38)" });
+
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: textBlockRef.current,
+            start: "top 58%",
+            end: "bottom 42%",
+            scrub: 1,
+          },
+        })
+        .to(firstTextRef.current, { color: "rgba(255,255,255,0.38)", ease: "none" }, 0)
+        .to(secondTextRef.current, { color: "rgba(255,255,255,1)", ease: "none" }, 0);
+    },
+    { scope: sectionRef },
+  );
 
   return (
-    <section id="story" className="w-full min-h-screen relative flex items-center justify-center overflow-hidden py-24 md:py-36" style={{ background: "var(--black-2)" }}>
+    <section ref={sectionRef} id="story" className="w-full min-h-screen relative flex items-center justify-center overflow-hidden py-24 md:py-36" style={{ background: "var(--black-2)" }}>
       {/* Background Video/Overlay — Matching the moody hands visual */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/60 z-10" /> {/* Dark overlay */}
@@ -37,16 +66,17 @@ const OurStory = () => {
           </motion.span>
 
           <motion.div
+            ref={textBlockRef}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h3 className="text-white text-[40px] font-medium leading-[1.3] mb-10" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
+            <h3 ref={firstTextRef} className="text-[40px] font-medium leading-[1.3] mb-10" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
               Established in 2014, Brandestiny was created with a simple purpose – to offer the kind of service our founders wished they had for their own ventures. Built on values that truly matter, we have grown by staying true to that ethos.
             </h3>
             
-            <p className="text-white/70 text-[40px] font-medium leading-[1.4] mb-16 max-w-3xl" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
+            <p ref={secondTextRef} className="text-[40px] font-medium leading-[1.4] mb-16 max-w-3xl" style={{ fontFamily: "'Helvetica Now Display', sans-serif" }}>
               Our independence allows us to carve our own path, free from corporate red tape or the need to follow trends dictated by big tech. Instead, we offer advice and strategies tailored specifically to your business, always focused on your goals.
             </p>
           </motion.div>

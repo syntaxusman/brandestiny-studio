@@ -5,9 +5,10 @@ import brandestinyLogo from "@/assets/brandestiny-footer-logo.png";
 
 const navItems = [
   { label: "HOME", number: "01", href: "/" },
-  { label: "CASE STUDIES", number: "02", href: "/case-studies" },
-  { label: "BLOG", number: "03", href: "/blog" },
-  { label: "LET'S CONNECT", number: "04", href: "/lets-connect" },
+  { label: "SERVICES", number: "02", href: "/services" },
+  { label: "CASE STUDIES", number: "03", href: "/case-studies" },
+  { label: "BLOG", number: "04", href: "/blog" },
+  { label: "LET'S CONNECT", number: "05", href: "/lets-connect" },
 ];
 
 const NavPill = () => {

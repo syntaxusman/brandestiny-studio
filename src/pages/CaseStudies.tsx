@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -8,6 +9,8 @@ import CustomCursor from "@/components/CustomCursor";
 import NavPill from "@/components/NavPill";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
+import footerLogo from "@/assets/brandestiny-footer-logo.png";
+import brandestinyLogo from "@/assets/brandestiny.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -205,6 +208,7 @@ const CaseStudies = ({ pageType = "case-studies" }: CaseStudiesProps) => {
   const triggerRef = useRef<HTMLDivElement>(null);
   const detailRef = useRef<HTMLElement>(null);
   const [selectedStudy, setSelectedStudy] = useState<CaseStudy | null>(null);
+  const navigate = useNavigate();
 
   const caseStudies = useMemo(() => buildCaseStudies(), []);
   const isBlog = pageType === "blog";
@@ -316,12 +320,41 @@ const CaseStudies = ({ pageType = "case-studies" }: CaseStudiesProps) => {
     () => {
       if (!selectedStudy || !detailRef.current) return;
       const scroller = detailRef.current;
+      const logoIntro = scroller.querySelector(".case-open-logo");
+      const detailShell = scroller.querySelector(".case-detail-shell");
 
-      gsap.fromTo(
-        scroller,
-        { autoAlpha: 0, y: 34 },
-        { autoAlpha: 1, y: 0, duration: 0.65, ease: "power3.out" },
-      );
+      const introTimeline = gsap.timeline();
+
+      introTimeline
+        .fromTo(scroller, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.05 })
+        .fromTo(
+          logoIntro,
+          { autoAlpha: 1, rotate: 0, scale: 1.25 },
+          {
+            autoAlpha: 0,
+            rotate: 720,
+            scale: 0.18,
+            duration: 1,
+            ease: "power3.inOut",
+          },
+          0.05,
+        )
+        .fromTo(
+          detailShell,
+          {
+            autoAlpha: 0,
+            scale: 0.82,
+            clipPath: "inset(45% 45% 45% 45% round 28px)",
+          },
+          {
+            autoAlpha: 1,
+            scale: 1,
+            clipPath: "inset(0% 0% 0% 0% round 0px)",
+            duration: 0.95,
+            ease: "power3.out",
+          },
+          0.22,
+        );
 
       const panels = gsap.utils.toArray<HTMLElement>(".case-panel");
 
@@ -377,6 +410,12 @@ const CaseStudies = ({ pageType = "case-studies" }: CaseStudiesProps) => {
 
     ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     setSelectedStudy(null);
+  };
+
+  const handleLetsConnect = () => {
+    ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    setSelectedStudy(null);
+    navigate("/lets-connect");
   };
 
   const selectedMedia = selectedStudy ? getStudyMedia(selectedStudy) : [];
@@ -505,6 +544,15 @@ const CaseStudies = ({ pageType = "case-studies" }: CaseStudiesProps) => {
             className="fixed inset-0 z-[45] overflow-y-auto bg-black text-white no-scrollbar"
             data-lenis-prevent
           >
+            <div className="case-open-logo pointer-events-none fixed inset-0 z-[60] flex items-center justify-center bg-black">
+              <img
+                src={brandestinyLogo}
+                alt=""
+                className="w-28 md:w-40 select-none"
+                aria-hidden="true"
+              />
+            </div>
+
             <button
               type="button"
               onClick={closeStudy}
@@ -514,38 +562,39 @@ const CaseStudies = ({ pageType = "case-studies" }: CaseStudiesProps) => {
               <X className="h-5 w-5" />
             </button>
 
-            <section className="min-h-screen px-6 md:px-12 lg:px-20 flex flex-col justify-end pb-12 md:pb-20 relative overflow-hidden">
-              {selectedStudy.videos[0] && (
-                <video
-                  src={selectedStudy.videos[0]}
-                  className="absolute inset-0 w-full h-full object-cover opacity-35"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/30" />
-              <button
-                type="button"
-                onClick={closeStudy}
-                className="relative z-10 self-start mb-12 inline-flex items-center gap-3 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-[0.2em] font-bold"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                All {isBlog ? "blog" : "case studies"}
-              </button>
-              <div className="relative z-10 max-w-5xl">
-                <p className="text-white/45 text-xs md:text-sm uppercase tracking-[0.3em] font-bold mb-5">
-                  {selectedStudy.category}
-                </p>
-                <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tight mb-8">
-                  {selectedStudy.title}
-                </h1>
-                <p className="max-w-2xl text-white/70 text-lg md:text-2xl leading-relaxed">
-                  {selectedStudy.summary}
-                </p>
-              </div>
-            </section>
+            <div className="case-detail-shell">
+              <section className="min-h-screen px-6 md:px-12 lg:px-20 flex flex-col justify-end pb-12 md:pb-20 relative overflow-hidden">
+                {selectedStudy.videos[0] && (
+                  <video
+                    src={selectedStudy.videos[0]}
+                    className="absolute inset-0 w-full h-full object-cover opacity-35"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/75 to-black/30" />
+                <button
+                  type="button"
+                  onClick={closeStudy}
+                  className="relative z-10 self-start mb-12 inline-flex items-center gap-3 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-[0.2em] font-bold"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  All {isBlog ? "blog" : "case studies"}
+                </button>
+                <div className="relative z-10 max-w-5xl">
+                  <p className="text-white/45 text-xs md:text-sm uppercase tracking-[0.3em] font-bold mb-5">
+                    {selectedStudy.category}
+                  </p>
+                  <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tight mb-8">
+                    {selectedStudy.title}
+                  </h1>
+                  <p className="max-w-2xl text-white/70 text-lg md:text-2xl leading-relaxed">
+                    {selectedStudy.summary}
+                  </p>
+                </div>
+              </section>
 
             <section className="px-6 md:px-12 lg:px-20 py-16 md:py-28">
               <div className="flex flex-col gap-16 md:gap-28">
@@ -603,6 +652,44 @@ const CaseStudies = ({ pageType = "case-studies" }: CaseStudiesProps) => {
                 })}
               </div>
             </section>
+
+              <section className="overflow-hidden px-6 md:px-12 lg:px-20 pb-20 md:pb-32">
+                <div className="border-t border-white/10 pt-10 md:pt-14">
+                  <div className="marquee-track mb-14 md:mb-20">
+                    {[...Array(4)].map((_, i) => (
+                      <div key={i} className="flex items-center gap-8 mx-8 flex-shrink-0">
+                        <span
+                          className="font-display text-white/70 font-bold whitespace-nowrap tracking-tight"
+                          style={{ fontSize: "clamp(4rem, 8vw, 8rem)" }}
+                        >
+                          BRANDESTINY
+                        </span>
+                        <img
+                          src={footerLogo}
+                          alt="Brandestiny mark"
+                          className="w-16 h-16 md:w-20 md:h-20 object-contain flex-shrink-0 opacity-80"
+                          loading="lazy"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mx-auto flex min-h-[260px] max-w-5xl flex-col items-center justify-center gap-8 text-center">
+                    <h2 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold leading-none text-white">
+                      Let's Go Beyond the Stars
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={handleLetsConnect}
+                      className="inline-flex items-center gap-3 rounded-full bg-[#fde3c6] px-7 py-4 text-[12px] font-bold uppercase tracking-[0.18em] text-black transition-transform duration-300 hover:scale-105"
+                    >
+                      Let's Connect
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </section>
+            </div>
           </main>
         )}
 
