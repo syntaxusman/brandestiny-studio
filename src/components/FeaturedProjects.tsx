@@ -172,25 +172,19 @@ const FeaturedProjects = () => {
         <div ref={rightColumnRef} className="md:w-2/5 flex flex-col">
           <div className="flex flex-col gap-12">
             {/* Heading Area */}
-            <div className="flex justify-between items-start">
+            <div>
               <h2 className="font-display text-white text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tight">
                 Featured <br /> Projects
               </h2>
-              <span className="font-display text-white/20 text-6xl md:text-7xl lg:text-8xl font-bold leading-none">
-                {projects.length}
-              </span>
             </div>
 
             {/* Custom Styled View All Link */}
             <Link
               to="/case-studies"
-              className="group relative flex items-center justify-between border border-white/20 rounded-full px-8 py-5 hover:bg-white hover:text-black transition-all duration-500 overflow-hidden"
+              className="group relative flex items-center border border-white/20 rounded-full px-8 py-5 hover:bg-white hover:text-black transition-all duration-500 overflow-hidden"
             >
               <span className="text-[11px] font-bold tracking-[0.2em] uppercase z-10">
                 View All
-              </span>
-              <span className="text-[12px] font-medium opacity-60 z-10 group-hover:opacity-100 transition-opacity">
-                {projects.length}
               </span>
               <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
             </Link>
