@@ -13,7 +13,7 @@ const navLinks = [
   { label: "Services", href: "#services" },
   { label: "About", href: "#story" },
   { label: "Contact", href: "#contact" },
-  { label: "Cookies Policy", href: "#" },
+  { label: "Refund Policy", href: "/refund-policy" },
   { label: "Privacy Policy", href: "#" },
 ];
 
