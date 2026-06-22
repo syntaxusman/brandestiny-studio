@@ -1,36 +1,47 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+const trustpilotReviewUrl = "https://www.trustpilot.com/review/brandestiny.co";
 
 const testimonials = [
   {
-    name: "Kristina Kosa",
-    role: "Co-Founder, Yoginess",
-    text: "Brandestiny has an amazing customer support! plays a vital role aftersale service, the people are very really supportive, and also respond back quickly with the fixes.",
-    avatar: "https://i.pravatar.cc/150?u=kristina",
+    name: "Meti Mos",
+    role: "Trustpilot review, Oct 31 2025",
+    text: "They praised the website project management, clear communication, smooth delivery, and fast ongoing support.",
+    avatar: "https://ui-avatars.com/api/?name=Meti+Mos&background=fde3c6&color=020202",
   },
   {
-    name: "Kristina Kosa",
-    role: "Co-Founder, Yoginess",
-    text: "Brandestiny has an amazing customer support! plays a vital role aftersale service, the people are very really supportive, and also respond back quickly with the fixes.",
-    avatar: "https://i.pravatar.cc/150?u=kristina",
+    name: "Ricky Simpson",
+    role: "Trustpilot review, Sep 25 2025",
+    text: "Ricky was happy with his new website design and described Matthew as helpful and efficient.",
+    avatar: "https://ui-avatars.com/api/?name=Ricky+Simpson&background=fde3c6&color=020202",
     featured: true,
   },
   {
-    name: "Kristina Kosa",
-    role: "Co-Founder, Yoginess",
-    text: "Brandestiny has an amazing customer support! plays a vital role aftersale service, the people are very really supportive, and also respond back quickly with the fixes.",
-    avatar: "https://i.pravatar.cc/150?u=kristina",
+    name: "Muzzammil Hussain",
+    role: "Trustpilot review, Aug 4 2025",
+    text: "Muzzammil appreciated the quick responses and felt the team listened closely to what he wanted.",
+    avatar: "https://ui-avatars.com/api/?name=Muzzammil+Hussain&background=fde3c6&color=020202",
   },
   {
-    name: "Kristina Kosa",
-    role: "Co-Founder, Yoginess",
-    text: "Brandestiny has an amazing customer support! plays a vital role aftersale service, the people are very really supportive, and also respond back quickly with the fixes.",
-    avatar: "https://i.pravatar.cc/150?u=kristina",
+    name: "Jeff King",
+    role: "Trustpilot review, Jul 1 2025",
+    text: "Jeff highlighted the logo design process, responsive communication, quick turnaround, and professional service.",
+    avatar: "https://ui-avatars.com/api/?name=Jeff+King&background=fde3c6&color=020202",
+  },
+  {
+    name: "BS Carpets",
+    role: "Trustpilot review, Aug 4 2025",
+    text: "They were glad with the website and marketing service, calling the overall experience highly recommended.",
+    avatar: "https://ui-avatars.com/api/?name=BS+Carpets&background=fde3c6&color=020202",
+  },
+  {
+    name: "francis clarke",
+    role: "Trustpilot review, Mar 2 2025",
+    text: "Francis was pleased with the website work and the improved overall look and feel.",
+    avatar: "https://ui-avatars.com/api/?name=francis+clarke&background=fde3c6&color=020202",
   },
 ];
 
 const Testimonials = () => {
-  const navigate = useNavigate();
   // Double the testimonials for infinite marquee effect
   const doubledTestimonials = [...testimonials, ...testimonials, ...testimonials];
 
@@ -54,7 +65,7 @@ const Testimonials = () => {
         <motion.div 
           className="flex gap-8"
           animate={{
-            x: [0, -1712], // Exactly 4 cards (400px each) + 4 gaps (28px/7rem each)
+            x: [0, -2568], // Exactly 6 cards (400px each) + 6 gaps (28px/7rem each)
           }}
           transition={{
             x: {
@@ -82,17 +93,22 @@ const Testimonials = () => {
 
               {/* Testimonial Text */}
               <p className="text-lg md:text-xl leading-relaxed mb-8 flex-1 font-display text-white/80 group-hover/card:text-black">
+                <span className="mb-4 block text-xl leading-none tracking-[0.12em] text-[#fde3c6] group-hover/card:text-[#d4b499]" aria-label="5 star rating">
+                  ★★★★★
+                </span>
                 {t.text}
               </p>
 
               {/* Featured Call to Action - Now only shows on hover or if needed */}
               <div className="mb-10 text-center opacity-0 group-hover/card:opacity-100 transition-opacity">
-                <button 
-                  onClick={() => navigate("/lets-connect")}
+                <a
+                  href={trustpilotReviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-black font-bold text-lg border-b-2 border-black/10 hover:border-black transition-all pb-1"
                 >
-                  Book A Call
-                </button>
+                  View on Trustpilot
+                </a>
               </div>
 
               {/* Footer: Avatar + Info */}

@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Building2, Mail } from "lucide-react";
 import footerLogo from "@/assets/brandestiny-footer-logo.png";
+import clutchTop1000Badge from "@/assets/badges/2025-1.webp";
+import clutchDevelopersBadge from "@/assets/badges/2025-4.webp";
+import brandBadge from "@/assets/badges/badge.svg";
+import barkTopRankedBadge from "@/assets/badges/eed43d03-5964-4024-956a-e4d48930ca49.png";
+import { sendNewsletterSignup } from "@/lib/newsletterEmail";
 
 const navLinks = [
   { label: "Work", href: "#projects" },
@@ -33,6 +38,13 @@ const contactLinks = [
   { label: "US Phone Number", value: "+1 (213) 993-0155", href: "tel:+12139930155", icon: "us" },
   { label: "UK Phone Number", value: "+ 44 (020) 382-9286", href: "tel:+440203829286", icon: "uk" },
   { label: "Company Number", value: "16558368", href: null, icon: "company" },
+];
+
+const badges = [
+  { label: "Bark Top Ranked", src: barkTopRankedBadge, className: "max-h-24 md:max-h-28" },
+  { label: "Clutch Top 1000", src: clutchTop1000Badge, className: "max-h-20 md:max-h-24" },
+  { label: "Clutch Top Software Developers 2025", src: clutchDevelopersBadge, className: "max-h-20 md:max-h-24" },
+  { label: "Google Cloud Next badge", src: brandBadge, className: "max-h-20 md:max-h-24" },
 ];
 
 const FlagIcon = ({ country }: { country: "uk" | "us" }) => {
@@ -232,9 +244,32 @@ const SocialLogo = ({ label }: { label: string }) => {
 
 const Footer = () => {
   const [email, setEmail] = useState("");
+  const [newsletterState, setNewsletterState] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [newsletterMessage, setNewsletterMessage] = useState("");
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleNewsletterSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail || newsletterState === "submitting") return;
+
+    setNewsletterState("submitting");
+    setNewsletterMessage("");
+
+    try {
+      await sendNewsletterSignup({ email: trimmedEmail });
+      setEmail("");
+      setNewsletterState("success");
+      setNewsletterMessage("You're subscribed. Thanks for joining us.");
+    } catch (error) {
+      console.error("Newsletter signup failed", error);
+      setNewsletterState("error");
+      setNewsletterMessage("We could not save that email. Please try again or email info@brandestiny.co.");
+    }
   };
 
   return (
@@ -266,16 +301,63 @@ const Footer = () => {
         </div>
       </motion.div>
 
-      {/* Tag bar */}
-      <div className="flex">
-        <div className="px-6 py-3" style={{ width: "fit-content" }}>
+      {/* Newsletter strip */}
+      <div className="pt-8">
+        <form
+          className="grid gap-6 px-6 py-6 md:grid-cols-[auto_1fr_minmax(320px,520px)] md:items-center md:px-10 lg:px-12"
+          style={{ background: "#fde3c6" }}
+          onSubmit={handleNewsletterSubmit}
+        >
           <img
             src={footerLogo}
             alt="Brandestiny"
-            className="h-14 w-14 md:h-16 md:w-16 object-contain"
+            className="h-14 w-14 object-contain invert md:h-16 md:w-16"
             loading="lazy"
           />
-        </div>
+          <div>
+            <h3 className="font-display text-2xl font-bold leading-tight text-[#020202] md:text-4xl">
+              Insights for sharper brands.
+            </h3>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#020202]/75 md:text-base">
+              Subscribe to our newsletter for insights on branding, design trends, and creative strategies.
+            </p>
+          </div>
+          <div className="relative">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (newsletterState !== "submitting") {
+                  setNewsletterState("idle");
+                  setNewsletterMessage("");
+                }
+              }}
+              className="newsletter-input w-full pr-14"
+              aria-label="Email address"
+              required
+            />
+            <button
+              type="submit"
+              className="absolute bottom-0 right-0 top-0 flex px-4 items-center justify-center interactive transition-opacity hover:opacity-70"
+              style={{ background: "rgba(255,255,255,0.1)" }}
+              aria-label="Subscribe to newsletter"
+              disabled={newsletterState === "submitting"}
+            >
+              <ArrowUpRight size={18} className="text-white" />
+            </button>
+            {newsletterMessage && (
+              <p
+                className={`mt-2 text-xs font-medium ${
+                  newsletterState === "error" ? "text-red-700" : "text-[#020202]/70"
+                }`}
+              >
+                {newsletterMessage}
+              </p>
+            )}
+          </div>
+        </form>
       </div>
 
       {/* Main footer content */}
@@ -385,28 +467,23 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Column 5: Newsletter */}
+          {/* Column 5: Badges */}
           <div className="md:col-span-2 lg:col-span-1">
-            <h4 className="text-white/40 text-xs font-grotesk uppercase tracking-wider mb-5">Newsletter</h4>
-            <div className="p-5" style={{ background: "#fde3c6" }}>
-              <p className="text-[#020202] text-sm mb-4 leading-relaxed">
-                Subscribe to our newsletter for insights on branding, design trends, and creative strategies.
-              </p>
-              <div className="relative">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="newsletter-input w-full pr-14"
-                />
-                <button
-                  className="absolute right-0 top-0 bottom-0 px-4 flex items-center justify-center interactive hover:opacity-70 transition-opacity"
-                  style={{ background: "rgba(255,255,255,0.1)" }}
+            <h4 className="text-white/40 text-xs font-grotesk uppercase tracking-wider mb-5">Badges</h4>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2">
+              {badges.map((badge) => (
+                <div
+                  key={badge.label}
+                  className="flex min-h-[92px] items-center justify-center overflow-hidden border border-white/10 bg-white/[0.04] p-3"
                 >
-                  <ArrowUpRight size={18} className="text-white" />
-                </button>
-              </div>
+                  <img
+                    src={badge.src}
+                    alt={badge.label}
+                    className={`w-full object-contain ${badge.className}`}
+                    loading="lazy"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
