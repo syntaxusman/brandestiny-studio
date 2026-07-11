@@ -9,6 +9,7 @@ import CaseStudies from "./pages/CaseStudies.tsx";
 import Blog from "./pages/Blog.tsx";
 import LetsConnect from "./pages/LetsConnect.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.tsx";
 import RefundPolicy from "./pages/RefundPolicy.tsx";
 import Preloader from "./components/Preloader.tsx";
 import RouteTransition from "./components/RouteTransition.tsx";
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/case-studies" element={<CaseStudies />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/lets-connect" element={<LetsConnect />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

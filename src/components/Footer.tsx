@@ -14,7 +14,7 @@ const navLinks = [
   { label: "About", href: "#story" },
   { label: "Contact", href: "#contact" },
   { label: "Refund Policy", href: "/refund-policy" },
-  { label: "Privacy Policy", href: "#" },
+  { label: "Privacy Policy", href: "/privacy-policy" },
 ];
 
 const socialLinks = [
