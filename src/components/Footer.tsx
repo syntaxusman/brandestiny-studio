@@ -423,7 +423,7 @@ const Footer = () => {
                         {item.value}
                       </span>
                       {"address" in item && (
-                        <span className="text-xs leading-snug text-white/50">
+                        <span className="text-sm font-medium leading-snug text-white">
                           {item.address}
                         </span>
                       )}
@@ -433,7 +433,7 @@ const Footer = () => {
 
                 if (!item.href) {
                   return (
-                    <div key={item.label} className="flex items-start gap-3">
+                    <div key={item.label} className={`flex gap-3 ${item.icon === "us" || item.icon === "uk" ? "items-center" : "items-start"}`}>
                       {content}
                     </div>
                   );
@@ -443,7 +443,7 @@ const Footer = () => {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="flex w-fit items-start gap-3 transition-colors duration-300 hover:text-[#fde3c6] interactive"
+                    className={`flex w-fit gap-3 transition-colors duration-300 hover:text-[#fde3c6] interactive ${item.icon === "us" || item.icon === "uk" ? "items-center" : "items-start"}`}
                     aria-label={`${item.label}: ${item.value}`}
                   >
                     {content}
