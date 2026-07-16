@@ -35,8 +35,8 @@ const platformLinks = [
 
 const contactLinks = [
   { label: "Email", value: "info@brandestiny.co", href: "mailto:info@brandestiny.co", icon: "mail" },
-  { label: "US Phone Number", value: "+1 (213) 993-0155", href: "tel:+12139930155", icon: "us" },
-  { label: "UK Phone Number", value: "+ 44 (020) 382-9286", href: "tel:+440203829286", icon: "uk" },
+  { label: "US Phone Number", value: "+1 (213) 993-0155", address: "15301 Ventura Blvd, Sherman Oaks, CA 91403, USA", href: "tel:+12139930155", icon: "us" },
+  { label: "UK Phone Number", value: "+ 44 (020) 382-9286", address: "Suite 7, 12 Nether Hall Road, Doncaster, England, DN1 2PW", href: "tel:+440203829286", icon: "uk" },
   { label: "Company Number", value: "16558368", href: null, icon: "company" },
 ];
 
@@ -422,6 +422,11 @@ const Footer = () => {
                       <span className="text-sm font-medium leading-snug text-white">
                         {item.value}
                       </span>
+                      {"address" in item && (
+                        <span className="text-xs leading-snug text-white/50">
+                          {item.address}
+                        </span>
+                      )}
                     </span>
                   </>
                 );
